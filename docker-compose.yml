@@ -1,0 +1,22 @@
+version: "3"
+services:
+  sequence_analyzer:
+    image: taichimurakami/swapvid_backend
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    container_name: swapvid_backend-sequence_analyzer
+    volumes:
+      - ./src:/swapvid_backend
+    ports:
+      - 8881:8881
+      - 8882:8882
+      - 8883:8883
+    tty: true
+    stdin_open: true
+    command: >
+      /bin/sh -c "
+      python3 /swapvid_backend/serve_sequence_analyzer.py &
+      python3 /swapvid_backend/serve_pdf_receiver.py &
+      python3 /swapvid_backend/serve_pdf_analyzer.py
+      "

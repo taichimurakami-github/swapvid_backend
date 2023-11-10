@@ -1,0 +1,16 @@
+paths:
+  data_dir_root: "/swapvid_backend/.data/"
+
+  3rd_party:
+    tesseract_ocr: "/usr/bin/tesseract"
+    poppler: "/poppler/build/utils/"
+
+host: "0.0.0.0"
+
+ports:
+  sequence_analyzer: 8881
+  pdf_receiver: 8882
+  pdf_analyzer: 8883
+
+frontend:
+  url: "http://localhost:3070"
