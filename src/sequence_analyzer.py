@@ -26,6 +26,7 @@ class SequenceAnalyzerResult:
     """
 
     content_sequence_matched: bool
+    document_available: bool
     content_matching_result: FoundRelatedPage | FoundRelatedLine | None
     viewport_estimation_result: DocumentScaleViewport | None
 
@@ -72,9 +73,11 @@ class SequenceAnalyzer:
         )
 
         if document_index is None:
+            print("\nFound no document index data. Returning empty result. \n")
             return SequenceAnalyzerResult(
                 content_sequence_matched=False,
                 content_matching_result=None,
+                document_available=False,
                 viewport_estimation_result=None,
             )
 
@@ -106,6 +109,7 @@ class SequenceAnalyzer:
                     content_sequence_matched=content_matched,
                     viewport_estimation_result=estimated_viewport,
                     content_matching_result=most_matching_page,
+                    document_available=True,
                 )
 
             case DocumentType.DOCUMENT:
@@ -127,6 +131,7 @@ class SequenceAnalyzer:
                     content_sequence_matched=content_matched,
                     viewport_estimation_result=estimated_viewport,
                     content_matching_result=most_matching_line,
+                    document_available=True,
                 )
 
         raise ValueError(

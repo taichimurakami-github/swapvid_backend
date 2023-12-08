@@ -17,6 +17,7 @@ from util.config import Config
 class SwapVidSQAnalyzerResponse(ResponseBodyContent):
     """Represents data for response body content."""
 
+    document_available: bool
     estimated_viewport: tuple[tuple[int, int], tuple[int, int]] | None
     matched_content_vf: str | None
     matched_content_doc: str | None
@@ -29,6 +30,7 @@ class SwapVidSQAnalyzerResponse(ResponseBodyContent):
 
         if result.content_matching_result is None:
             return SwapVidSQAnalyzerResponse(
+                document_available=result.document_available,
                 estimated_viewport=None,
                 matched_content_vf=None,
                 matched_content_doc=None,
@@ -37,6 +39,7 @@ class SwapVidSQAnalyzerResponse(ResponseBodyContent):
             )
 
         return SwapVidSQAnalyzerResponse(
+            document_available=result.document_available,
             estimated_viewport=result.viewport_estimation_result.get_relative_bbox_tuple(),
             matched_content_vf=result.content_matching_result.match_src_from_video_frame.content,
             matched_content_doc=result.content_matching_result.match_src_from_index.content,
@@ -103,6 +106,9 @@ class HttpPostHandler(HttpPostHandlerBase):
     #         error_type="internal_system_error",
     #         error_content=str(err.msg),
     #     )
+
+
+server = None
 
 
 def main():
