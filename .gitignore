@@ -1,4 +1,7 @@
 
+# Ignore index files
+.DS_Store
+
 # Ignore asset directory
 .data/
 
