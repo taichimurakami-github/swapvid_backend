@@ -37,13 +37,17 @@ class HttpPostHandlerBase(
         content_length = int(self.headers["content-length"])
         return self.rfile.read(content_length)
 
-    def send_ok_res(self, body_content_to_json):
+    def send_ok_res(self, body_content_to_json, host_root_url: str):
         """Send success response with the given body content."""
 
         # create response header
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "http://0.0.0.0:3070")
+        # self.send_header("Access-Control-Allow-Origin", Config().frontend_url)
+        self.send_header(
+            "Access-Control-Allow-Origin",
+            host_root_url,  # Allow CORS request from client
+        )
         self.end_headers()
 
         # create response body
@@ -59,6 +63,14 @@ class HttpPostHandlerBase(
         body_content = {"error_type": error_type, "error_content": error_content}
         self.wfile.write(json.dumps(body_content).encode("utf-8"))
 
+    def terminate(self):
+        """Terminate the connection."""
+        self.close_connection = True
+
     @abstractmethod
     def do_POST(self):
+        pass
+
+    @abstractmethod
+    def do_OPTIONS(self):
         pass

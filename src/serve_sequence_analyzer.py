@@ -63,7 +63,13 @@ class HttpPostHandler(HttpPostHandlerBase):
 
     def do_POST(self):
         # try:
+
+        origin_url = self.headers["Origin"]
+
         print(f"\n\n\nNew request received at {self.path}:")
+        print(
+            f"\nCurrent request: Protocol Version={self.protocol_version}, Client Address={self.client_address}, Request Origin={origin_url}"
+        )
 
         asset_id = DefaultAssets.from_str(self.path.split("/")[-1])
 
@@ -89,7 +95,7 @@ class HttpPostHandler(HttpPostHandlerBase):
             pprint.pprint(res_data)
             print("\n")
 
-        self.send_ok_res(res_data_dict)
+        self.send_ok_res(res_data_dict, origin_url)
 
     # except (TypeError, NameError, ValueError) as err:
     #     print("\nRequest-dependent error occurred:")
