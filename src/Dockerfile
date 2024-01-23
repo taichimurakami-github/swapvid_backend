@@ -50,13 +50,18 @@ RUN add-apt-repository -y ppa:alex-p/tesseract-ocr5
 RUN apt-get update
 RUN apt install -y tesseract-ocr
 
-# Copy SwapVid backend server source code
-COPY . /swapvid_backend
+
+# Install libopencv-dev to avoid "cv2 module not found" error in python
+# https://qiita.com/siruku6/items/b8aae4cdbf6ebc0dc5d6
+RUN apt -y update && apt -y upgrade
+RUN apt -y install libopencv-dev pip
+
 
 # Install python modules 
 # **REQUIRED** pyocr, pdf2image, pillow, websockets
-RUN apt install -y pip
-RUN apt update
+COPY ./src /swapvid_backend
 WORKDIR /swapvid_backend/
-# RUN pip install -r requirements.txt
-RUN pip install pyyaml pyocr pdf2image pillow websockets
+
+
+# RUN pip install pyyaml pyocr pdf2image pillow websockets opencv-python
+RUN pip install -r requirements.txt
