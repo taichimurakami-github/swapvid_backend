@@ -14,7 +14,7 @@ from viewport import (
     DocumentScaleViewport,
 )
 from video_frame import VideoFrameImage
-from util.asset import DefaultAssets, Asset
+from util.asset import Asset
 
 # from util import paths
 
@@ -60,17 +60,13 @@ class SequenceAnalyzer:
 
         return self.__document_index_data[asset_id]
 
-    def match_content_sequence(
-        self, asset_id: DefaultAssets, video_frame: VideoFrameImage
-    ):
+    def match_content_sequence(self, asset_id: str, video_frame: VideoFrameImage):
         """
         Main function of SequenceAnalyzer class.
 
         :returns: SequenceAnalyzerResult
         """
-        document_index: DocumentIndex | None = self.__get_document_index_data(
-            asset_id.value
-        )
+        document_index: DocumentIndex | None = self.__get_document_index_data(asset_id)
 
         if document_index is None:
             print("\nFound no document index data. Returning empty result. \n")
