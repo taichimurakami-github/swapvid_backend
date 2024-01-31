@@ -11,6 +11,7 @@ ports:
   sequence_analyzer: 8881
   pdf_receiver: 8882
   pdf_analyzer: 8883
+  file_explorer: 8884
 
 frontend:
   url: "http://localhost:3070"
