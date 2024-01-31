@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from collections.abc import Iterable
 
 import pdf2image
-from PIL.Image import Image, new as new_pil_image
+from PIL import Image
 
 from document_index import PageMetadata
 
@@ -12,8 +12,8 @@ from document_index import PageMetadata
 class PDFLoaderResult:
     """Represents PDFLoader result."""
 
-    image_concat: Image
-    image_pages: Iterable[Image]
+    image_concat: Image.Image | None
+    image_pages: Iterable[Image.Image]
     metadata_pages: Iterable[PageMetadata]
     width: int
     height: int
@@ -30,13 +30,20 @@ class PDFLoader:
         os.environ["PATH"] = poppler_exe_path
 
     def __concat_vertically(
-        self, images_list: list[Image], concat_margin_y_px: int
-    ) -> Image:
+        self, images_list: list[Image.Image], concat_margin_y_px: int
+    ) -> Image.Image:
         result = images_list[0]
 
         for i in range(1, len(images_list)):
+            print(f"[PDFLoader] Concatting : No.{i} / {len(images_list) - 1}")
             img_to_concat = images_list[i]
-            dst = new_pil_image(
+
+            if i > 40:
+                print(
+                    result.width,
+                    result.height + img_to_concat.height + concat_margin_y_px,
+                )
+            dst = Image.new(
                 "RGB",
                 (
                     result.width,
@@ -50,18 +57,30 @@ class PDFLoader:
         return result
 
     def convert_pdf_to_img(
-        self, pdf_abs_path: str, i_start=None, i_end=None, concat_margin_y_px=0
+        self,
+        pdf_abs_path: str,
+        i_start=None,
+        i_end=None,
+        enable_concat=False,
+        concat_margin_y_px=0,
     ):
         """Converts PDF file to image."""
+
+        print("[PDFLoader] Converting pdf into image.")
         img_pages = pdf2image.convert_from_path(
             pdf_abs_path, first_page=i_start, last_page=i_end
         )
-        img_concat = self.__concat_vertically(img_pages, concat_margin_y_px)
+
+        img_concat = None
+        if enable_concat is True:
+            print("[PDFLoader] Converting images vertically.")
+            img_concat = self.__concat_vertically(img_pages, concat_margin_y_px)
 
         n_pages = len(img_pages)
         offset_top = 0
         metadata: list[PageMetadata] = []
         for i, img_page in enumerate(img_pages):
+            print(f"[PDFLoader] Converting : page No.{i} / {n_pages - 1}")
             w, h = img_page.size  #  w, h = PIL.Image.size
             metadata.append(
                 PageMetadata(width=w, height=h, offset_top=offset_top, page_id=i)
