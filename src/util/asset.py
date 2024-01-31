@@ -3,27 +3,27 @@ from enum import Enum
 from util.config import Config
 
 
-class DefaultAssets(Enum):
-    """Represents id of default assets."""
+# class DefaultAssets(Enum):
+#     """Represents id of default assets."""
 
-    IEEEVR2022Ogawa = "IEEEVR2022Ogawa"
-    IEEEVR2022Hoshikawa = "IEEEVR2022Hoshikawa"
-    CHI2021Fujita = "CHI2021Fujita"
-    EdanMeyerVpt = "EdanMeyerVpt"
-    EdanMeyerAlphaCode = "EdanMeyerAlphaCode"
-    SampleLectureLLM01 = "SampleLectureLLM01"
+#     IEEEVR2022Ogawa = "IEEEVR2022Ogawa"
+#     IEEEVR2022Hoshikawa = "IEEEVR2022Hoshikawa"
+#     CHI2021Fujita = "CHI2021Fujita"
+#     EdanMeyerVpt = "EdanMeyerVpt"
+#     EdanMeyerAlphaCode = "EdanMeyerAlphaCode"
+#     SampleLectureLLM01 = "SampleLectureLLM01"
 
-    @staticmethod
-    def get_all_values():
-        return DefaultAssets.__members__.values()
+#     @staticmethod
+#     def get_all_values():
+#         return DefaultAssets.__members__.values()
 
-    @staticmethod
-    def from_str(asset_id_str):
-        try:
-            return DefaultAssets[asset_id_str]
+#     @staticmethod
+#     def from_str(asset_id_str):
+#         try:
+#             return DefaultAssets[asset_id_str]
 
-        except (AttributeError, KeyError, ValueError):
-            return None
+#         except (AttributeError, KeyError, ValueError):
+#             return None
 
 
 class Asset:

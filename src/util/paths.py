@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 from typing import Callable
 
-from util.asset import DefaultAssets
 
 ################################
 # Path of a directory
