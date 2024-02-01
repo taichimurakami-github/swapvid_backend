@@ -1,11 +1,11 @@
 version: "3"
 services:
-  sequence_analyzer:
+  swapvid_backend:
     image: taichimurakami/swapvid_backend
     build:
       context: .
       dockerfile: ./src/Dockerfile
-    container_name: swapvid_backend-sequence_analyzer
+    container_name: swapvid_backend
     volumes:
       - ./src:/swapvid_backend
     ports:
