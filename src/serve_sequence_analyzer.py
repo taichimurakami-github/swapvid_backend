@@ -63,10 +63,10 @@ class HttpPostHandler(HttpPostHandlerBase):
     def do_POST(self):
         # try:
 
-        print(f"\n\n\nNew request received at {self.path}:")
+        print(f"\n\n\n[SequenceAnalyzerService] New request received at {self.path}:")
         request_origin = self.headers["Origin"]
         print(
-            f"\nCurrent request: Protocol Version={self.protocol_version}, Client Address={self.client_address}, Request Origin={request_origin}"
+            f"\n[SequenceAnalyzerService] Current request: Protocol Version={self.protocol_version}, Client Address={self.client_address}, Request Origin={request_origin}"
         )
 
         asset_id = self.path.split("/")[-1]
@@ -89,7 +89,7 @@ class HttpPostHandler(HttpPostHandlerBase):
             # pprint.pprint(result.content_matching_result)
             # print("\nmatch_result_index")
             # pprint.pprint(result.content_matching_result)
-            print("\nSequence Analyzer Response:")
+            print("\n[SequenceAnalyzerService] Sequence Analyzer Response:")
             pprint.pprint(res_data)
             print("\n")
 

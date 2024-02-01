@@ -69,7 +69,9 @@ class SequenceAnalyzer:
         document_index: DocumentIndex | None = self.__get_document_index_data(asset_id)
 
         if document_index is None:
-            print("\nFound no document index data. Returning empty result. \n")
+            print(
+                "\n[SequenceAnalyzer] Found no document index data. Returning empty result. \n"
+            )
             return SequenceAnalyzerResult(
                 content_sequence_matched=False,
                 content_matching_result=None,
@@ -131,5 +133,5 @@ class SequenceAnalyzer:
                 )
 
         raise ValueError(
-            f"Doctype must be either 'SLIDE' or 'DOCUMENT' of DocumentType class, but got {document_index.metadata.doc_type}"
+            f"[SequenceAnalyzer] Doctype must be either 'SLIDE' or 'DOCUMENT' of DocumentType class, but got {document_index.metadata.doc_type}"
         )

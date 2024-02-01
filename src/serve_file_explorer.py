@@ -30,7 +30,7 @@ class HttpPostHandler(HttpPostHandlerBase):
         return list(filter(lambda f: f not in self.SYSTEM_FILES, files))
 
     def do_GET(self):
-        print(f"\n\nNew request received at {self.path}:")
+        print(f"\n\n[FileExplorerService] New request received at {self.path}:")
 
         pdf_files = os.listdir(os.path.join(path_dir_data_base, "pdf"))
         index_files = os.listdir(os.path.join(path_dir_data_base, "document_index"))
