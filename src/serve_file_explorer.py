@@ -29,11 +29,25 @@ class HttpPostHandler(HttpPostHandlerBase):
     def __filter_system_files(self, files: list[str]) -> list[str]:
         return list(filter(lambda f: f not in self.SYSTEM_FILES, files))
 
+    def __get_files_in_pdf_dir(self):
+        try:
+            return os.listdir(os.path.join(path_dir_data_base, "pdf"))
+        except:
+            print("[FileExplorerService] Folder '.data/pdf' not found.")
+            return []
+
+    def __get_files_in_document_index_dir(self):
+        try:
+            return os.listdir(os.path.join(path_dir_data_base, "document_index"))
+        except:
+            print("[FileExplorerService] Folder '.data/document_index' not found.")
+            return []
+
     def do_GET(self):
         print(f"\n\n[FileExplorerService] New request received at {self.path}:")
 
-        pdf_files = os.listdir(os.path.join(path_dir_data_base, "pdf"))
-        index_files = os.listdir(os.path.join(path_dir_data_base, "document_index"))
+        pdf_files = self.__get_files_in_pdf_dir()
+        index_files = self.__get_files_in_document_index_dir()
 
         response_data = SwapVidBackendFileExplorerResponse(
             pdf_files=self.__filter_system_files(pdf_files),

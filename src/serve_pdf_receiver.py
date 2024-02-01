@@ -18,8 +18,10 @@ class HttpPostHandler(HttpPostHandlerBase):
         filename = self.path.split("/")[-1]
         filedata_bin = self.get_body_content_raw()
 
-        output_path = os.path.join(Asset.get_dirpath_pdf_src(), f"{filename}.pdf")
+        output_dir = Asset.get_dirpath_pdf_src()
+        os.makedirs(output_dir, exist_ok=True)
 
+        output_path = os.path.join(output_dir, f"{filename}.pdf")
         with open(output_path, "wb") as fp:
             print(f"\n[PdfReceiverService] Writting received PDF to {output_path}")
             fp.write(filedata_bin)
