@@ -12,11 +12,13 @@ services:
       - 8881:8881
       - 8882:8882
       - 8883:8883
+      - 8884:8884
     tty: true
     stdin_open: true
     command: >
       /bin/sh -c "
       python3 /swapvid_backend/serve_sequence_analyzer.py &
       python3 /swapvid_backend/serve_pdf_receiver.py &
-      python3 /swapvid_backend/serve_pdf_analyzer.py
+      python3 /swapvid_backend/serve_pdf_analyzer.py &
+      python3 /swapvid_backend/serve_file_explorer.py
       "

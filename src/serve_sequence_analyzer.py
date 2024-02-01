@@ -64,8 +64,9 @@ class HttpPostHandler(HttpPostHandlerBase):
         # try:
 
         print(f"\n\n\nNew request received at {self.path}:")
+        request_origin = self.headers["Origin"]
         print(
-            f"\nCurrent request: Protocol Version={self.protocol_version}, Client Address={self.client_address}, Request Origin={origin_url}"
+            f"\nCurrent request: Protocol Version={self.protocol_version}, Client Address={self.client_address}, Request Origin={request_origin}"
         )
 
         asset_id = self.path.split("/")[-1]

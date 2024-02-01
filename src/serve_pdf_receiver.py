@@ -24,7 +24,7 @@ class HttpPostHandler(HttpPostHandlerBase):
             print(f"\nWritting received PDF to {output_path}")
             fp.write(filedata_bin)
 
-        self.send_ok_res(None)
+        self.send_ok_res(None, self.headers["Origin"])
 
     # Handle preflight request caused by the cors problem
     def do_OPTIONS(self):
