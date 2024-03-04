@@ -13,15 +13,17 @@ class HttpPostHandler(HttpPostHandlerBase):
         super().__init__(*args, **kwargs)
 
     def do_POST(self):
-        print(f"\n\nNew request received at {self.path}:")
+        print(f"\n\n[PdfReceiverService] New request received at {self.path}:")
 
         filename = self.path.split("/")[-1]
         filedata_bin = self.get_body_content_raw()
 
-        output_path = os.path.join(Asset.get_dirpath_pdf_src(), f"{filename}.pdf")
+        output_dir = Asset.get_dirpath_pdf_src()
+        os.makedirs(output_dir, exist_ok=True)
 
+        output_path = os.path.join(output_dir, f"{filename}.pdf")
         with open(output_path, "wb") as fp:
-            print(f"\nWritting received PDF to {output_path}")
+            print(f"\n[PdfReceiverService] Writting received PDF to {output_path}")
             fp.write(filedata_bin)
 
         self.send_ok_res(None, self.headers["Origin"])

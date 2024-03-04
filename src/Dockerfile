@@ -63,5 +63,20 @@ COPY ./src /swapvid_backend
 WORKDIR /swapvid_backend/
 
 
+# Install python modules
+#
+# If "ERROR: No matching distribution found for XXXX(package-name + version)" occurs,
+# You have to re-install and update packages manually.
+# Please try the following steps.
+# 
+# 1. Run "make init" command with the following command activated, instead of "RUN pip install -r requirements.txt" in this file.
+# ```cmd
 # RUN pip install pyyaml pyocr pdf2image pillow websockets opencv-python
+# ```
+#
+# 2. After the container is built and running, run "pip freeze > requirements.txt" command in the container.
+#    Recommended: You should use (1)"make enter" command to enter the container, and (2)"make freeze-pypackages" command to run "pip freeze > requirements.txt".
+#    Check Makefile in the root and /src dir respectively for the details of the commands.
 RUN pip install -r requirements.txt
+
+CMD /bin/sh -c "python3 /swapvid_backend/serve_sequence_analyzer.py & python3 /swapvid_backend/serve_pdf_receiver.py & python3 /swapvid_backend/serve_pdf_analyzer.py & python3 /swapvid_backend/serve_file_explorer.py"
