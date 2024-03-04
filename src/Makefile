@@ -29,3 +29,6 @@ run-pdf-analyzer:
 
 run-pdf-services:
 	python3 serve_pdf_receiver.py & python3 serve_pdf_analyzer.py
+
+freeze-pypackages:
+	pip freeze > requirements.txt

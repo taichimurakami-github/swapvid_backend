@@ -25,7 +25,7 @@ stop:
 	docker compose down
 
 enter:
-	docker compose exec sequence_analyzer bash
+	docker compose exec swapvid_backend bash
 
 remove:
 	docker compose down --rmi all --volumes --remove-orphans
