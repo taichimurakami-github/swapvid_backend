@@ -1,4 +1,3 @@
-# import sys
 import pprint
 from dataclasses import dataclass
 
@@ -9,12 +8,11 @@ from sequence_analyzer import (
     SequenceAnalyzerResult,
 )
 from video_frame import VideoFrameImage
-from util.asset import DefaultAssets
 from util.config import Config
 
 
 @dataclass
-class SwapVidSQAnalyzerResponse(ResponseBodyContent):
+class SequenceAnalyzerApiResponse(ResponseBodyContent):
     """Represents data for response body content."""
 
     document_available: bool
@@ -29,7 +27,7 @@ class SwapVidSQAnalyzerResponse(ResponseBodyContent):
         """A factory method to create from a SequenceAnalyzerResult object."""
 
         if result.content_matching_result is None:
-            return SwapVidSQAnalyzerResponse(
+            return SequenceAnalyzerApiResponse(
                 document_available=result.document_available,
                 estimated_viewport=None,
                 matched_content_vf=None,
@@ -38,7 +36,7 @@ class SwapVidSQAnalyzerResponse(ResponseBodyContent):
                 score_sqmatch=None,
             )
 
-        return SwapVidSQAnalyzerResponse(
+        return SequenceAnalyzerApiResponse(
             document_available=result.document_available,
             estimated_viewport=result.viewport_estimation_result.get_relative_bbox_tuple(),
             matched_content_vf=result.content_matching_result.match_src_from_video_frame.content,
@@ -63,9 +61,14 @@ class HttpPostHandler(HttpPostHandlerBase):
 
     def do_POST(self):
         # try:
-        print(f"\n\n\nNew request received at {self.path}:")
 
-        asset_id = DefaultAssets.from_str(self.path.split("/")[-1])
+        print(f"\n\n\n[SequenceAnalyzerService] New request received at {self.path}:")
+        request_origin = self.headers["Origin"]
+        print(
+            f"\n[SequenceAnalyzerService] Current request: Protocol Version={self.protocol_version}, Client Address={self.client_address}, Request Origin={request_origin}"
+        )
+
+        asset_id = self.path.split("/")[-1]
 
         body_content_dataurl_str = self.get_body_content_str()
         video_frame = VideoFrameImage.from_dataurl(body_content_dataurl_str).resize(
@@ -77,19 +80,15 @@ class HttpPostHandler(HttpPostHandlerBase):
             video_frame=video_frame,
         )
 
-        res_data = SwapVidSQAnalyzerResponse.from_sequence_analyzer_result(result)
+        res_data = SequenceAnalyzerApiResponse.from_sequence_analyzer_result(result)
         res_data_dict = res_data.to_json_serializable()
 
         if result.content_matching_result:
-            # print("\nmatch_result_vf")
-            # pprint.pprint(result.content_matching_result)
-            # print("\nmatch_result_index")
-            # pprint.pprint(result.content_matching_result)
-            print("\nSequence Analyzer Response:")
+            print("\n[SequenceAnalyzerService] Sequence Analyzer Response:")
             pprint.pprint(res_data)
             print("\n")
 
-        self.send_ok_res(res_data_dict)
+        self.send_ok_res(res_data_dict, self.headers["Origin"])
 
     # except (TypeError, NameError, ValueError) as err:
     #     print("\nRequest-dependent error occurred:")

@@ -5,7 +5,6 @@ from dataclasses import dataclass, field
 
 from ocr import ShapedLineBox, OCRResult, LinePositionWithPageOffset
 from util import text
-from util.asset import DefaultAssets
 from util.base_class import JSONSerializableData
 
 
@@ -38,7 +37,7 @@ class PageMetadata(JSONSerializableData):
 
 @dataclass
 class DocumentMetadata(JSONSerializableData):
-    asset_id: DefaultAssets
+    asset_id: str
     width: int
     height: int
     n_pages: int
@@ -49,7 +48,7 @@ class DocumentMetadata(JSONSerializableData):
         dict_fmt = self.__dict__.copy()
 
         # Convert json unserializable data to serializable data
-        dict_fmt["asset_id"] = self.asset_id.value
+        dict_fmt["asset_id"] = self.asset_id
         dict_fmt["doc_type"] = self.doc_type.value
         dict_fmt["metadata_pages"] = [
             page_metadata.to_json_serializable()
@@ -170,7 +169,7 @@ class DocumentIndex(JSONSerializableData):
             # )
 
             metadata_converted = DocumentMetadata(
-                asset_id=DefaultAssets.from_str(metadata_output["asset_id"]),
+                asset_id=metadata_output["asset_id"],
                 width=metadata_output["width"],
                 height=metadata_output["height"],
                 n_pages=metadata_output["n_pages"],

@@ -41,8 +41,8 @@ def generate_error_message(message: str):
 
 async def run_pdf_analyzer(websocket):
     async for message in websocket:
-        print("Running pdf analyzer main.")
-        print(f"Received message: {message}")
+        print("[PDFAnalyzerService] Running pdf analyzer main.")
+        print(f"[PDFAnalyzerService] Received message: {message}")
 
         if "run" in message:
             (asset_id, i_page_start, i_page_end) = parse_start_message(message)
@@ -54,12 +54,14 @@ async def run_pdf_analyzer(websocket):
 
             # Needs PDF to run
             if not pdf_exists:
-                print("PDF file does not exist. Skipping...")
+                print("[PDFAnalyzerService] PDF file does not exist. Skipping...")
                 return await websocket.send("PDF file does not exist. Skipping...")
 
             # Skip to run if document index cache already exists
             if dindex_cache_exists:
-                print("Document index cache already exists. Skipping...")
+                print(
+                    "[PDFAnalyzerService] Document index cache already exists. Skipping..."
+                )
                 return await websocket.send(
                     "Document index cache already exists. Skipping..."
                 )
@@ -72,19 +74,19 @@ async def run_pdf_analyzer(websocket):
 
             await DocumentPDF(
                 asset_id, Config().path_poppler_exe
-            ).ws_generate_document_index_data(
+            ).generate_document_index_data(
                 websocket,
                 Asset.get_dirpath_document_index(),
                 Config().path_tesseract_ocr_exe,
                 page_start=i_page_start,
                 page_end=i_page_end,
-                progress_callback=progress_handler,
+                progress_callback_async=progress_handler,
             )
 
-            websocket.send(generate_success_message())
+            await websocket.send(generate_success_message())
 
         else:
-            websocket.send(
+            await websocket.send(
                 generate_error_message(
                     "Invalid message: Needs 'start' command in front of the message."
                 )

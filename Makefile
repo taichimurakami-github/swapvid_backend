@@ -12,6 +12,9 @@ TARGET = ASSET_SLIDE_01
 create-document-index:
 	python3 ./src/document_pdf.py
 
+create-scroll-timeline:
+	python3 ./src/match_from_local_video.py
+
 init:
 	docker compose up --build
 
@@ -20,3 +23,10 @@ run:
 
 stop:
 	docker compose down
+
+enter:
+	docker compose exec swapvid_backend bash
+
+remove:
+	docker compose down --rmi all --volumes --remove-orphans
+

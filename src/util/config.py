@@ -30,7 +30,6 @@ class Config(Singleton):
 
     def __init__(self):
         if self.__initialized:
-            print("Config instance already exists.")
             return
 
         print("\nInitializing config class...")
@@ -58,6 +57,8 @@ class Config(Singleton):
             self.port_pdf_receiver = self.__data["ports"]["pdf_receiver"]
 
             self.port_pdf_analyzer = self.__data["ports"]["pdf_analyzer"]
+
+            self.port_file_explorer = self.__data["ports"]["file_explorer"]
 
             self.frontend_url = self.__data["frontend"]["url"]
 
